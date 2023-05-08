@@ -1,0 +1,9 @@
+* {
+    box-sizing: border-box;
+    font-family: "Golos Text", sans-serif;
+}
+
+main {
+    padding-top: 2rem;
+    margin: initial;
+}
