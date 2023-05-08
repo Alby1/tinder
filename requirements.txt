@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+gunicorn
+requests
+celery
+cassandra-driver
+dateparser
+pandas
+requests_html
+selenium
