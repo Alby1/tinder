@@ -4,6 +4,37 @@
 }
 
 main {
-    padding-top: 2rem;
+    padding-top: 4rem;
     margin: initial;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="submit"],
+input[type="button"],
+button {
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+    border: 2px solid var(--accent);
+    outline: none;
+}
+
+input[type="text"]:focus-visible,
+input[type="password"]:focus-visible,
+input[type="email"]:focus-visible,
+input[type="submit"]:focus-visible,
+input[type="button"]:focus-visible,
+button:focus-visible {
+    border: 2px solid var(--darker-accent);
+}
+
+input[type="submit"],
+input[type="button"],
+button {
+    background-color: var(--lighter-accent);
+}
+
+a {
+    color: var(--accent);
 }

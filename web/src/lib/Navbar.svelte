@@ -1,13 +1,13 @@
 <!-- Logic -->
 <script>
-    import * as env from '$env/static/public';
+    import { page } from "$app/stores";
 
     let pages = [
         {"pageName": "Home", "pageUrl": "/"},
         {"pageName": "About", "pageUrl": "/about"}
     ];
 
-    export let selectedPage;
+    $: selectedPage = $page.url.pathname;
 </script>
 
 <!-- Style -->
@@ -15,6 +15,7 @@
     nav {
         position: fixed;
         display: flex;
+        justify-content: space-between;
         align-items: center;
         padding-inline: 0.5rem;
         top: 0;
@@ -24,36 +25,47 @@
         gap: 1rem;
     }
 
-    nav > a {
+    nav a {
         padding: 1rem;
         text-decoration: none;
         transition: .25s ease;
         color: whitesmoke;
     }
 
-    nav:hover > a:not(:hover) {
+    nav:hover a:not(:hover) {
         color: var(--darker-accent);
     }
 
-    nav:hover > a:hover,
-    nav > a[selected="true"] {
+    nav:hover a:hover,
+    nav a[selected="true"] {
         color: white;
     }
     
-    nav:hover > a:hover {
+    nav:hover a:hover {
         box-shadow: 0 2px 0 0 var(--lighter-accent);
     }
     
-    nav > a[selected="true"] {
+    nav a[selected="true"] {
         box-shadow: 0 2px 0 0 var(--darker-accent);
         font-weight: 500;
+    }
+
+    nav > div {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
     }
 </style>
 
 <!-- HTML -->
-<nav style="--accent:{env.PUBLIC_ACCENT_COLOR}; --lighter-accent:{env.PUBLIC_LIGHTER_ACCENT_COLOR}; --darker-accent:{env.PUBLIC_DARKER_ACCENT_COLOR};">
-    <h2 style="margin: 0;">Tinder for Piffy</h2>
-    {#each pages as page}
-        <a href="{page.pageUrl}" selected={selectedPage == page.pageName ? "true" : "false"}>{page.pageName}</a>
-    {/each}
+<nav>
+    <div>
+        <h2 style="margin: 0;">Tinder for Piffy</h2>
+        {#each pages as page}
+            <a href="{page.pageUrl}" selected={selectedPage == page.pageUrl ? "true" : "false"}>{page.pageName}</a>
+        {/each}
+    </div>
+    <div>
+        <a href="/login" selected={selectedPage == "/login" ? "true" : "false"}>Login</a>
+    </div>
 </nav>
