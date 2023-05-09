@@ -1,45 +1,71 @@
 <script>
-    export let elements;
-    export let pages;
+    import { setContext, onMount, createEventDispatcher } from "svelte";
+    import { writable } from "svelte/store";
 
-    $: currentIndex = 0;
+	const dispatch = createEventDispatcher();
 
-    function handleSelection(index) {
-        currentIndex = index;
+    export let selectedIndex = 0;
+    export const changeSelection = (index) => {
+        console.log(selectedIndex, index);
+        select(index);
     }
+
+    let focusedSegmentIndex = writable(selectedIndex);
+    let selectedSegmentIndex = writable(selectedIndex);
+    let segments = [];
+    let indexesIterator = -1;
+
+    function select(segmentIndex) {
+        if (segmentIndex >= 0 && segmentIndex < segments.length) {
+            $focusedSegmentIndex = segmentIndex;
+
+            if (!segments[segmentIndex].isDisabled) {
+                $selectedSegmentIndex = $focusedSegmentIndex;
+                dispatch('selectionchanged', {
+                    index: $selectedSegmentIndex
+                });
+            }
+        }
+    }
+
+    setContext("SegmentedPicker", {
+        focusedSegmentIndex,
+        selectedSegmentIndex,
+        setIndex: () => {
+            indexesIterator += 1;
+            return indexesIterator;
+        },
+        addSegment: ({ index, isDisabled, length, offset }) => {
+            if (index === $selectedSegmentIndex) {
+                if (isDisabled) {
+                    console.warn("Segmented Picker: avoid initially selecting a disabled segment.");
+                }
+            }
+            segments = [...segments, { index, isDisabled, length, offset }]
+        },
+        setSelected: (segmentIndex) => {
+            select(segmentIndex);
+        }
+    });
+
+    onMount(() => {
+        if (segments.length < 2) {
+            console.warn("Segmented Picker: provide more than one element!");
+        }
+    });
 </script>
 
 <style>
-    .segmented {
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .items {
-        width: 100%;
-        background-color: var(--lighter-accent);
+    .segmented-picker {
+        display: inline-flex;
+        margin: 0;
+        padding: 0.25rem;
+        gap: 0.25rem;
         border-radius: 0.75rem;
-        display: flex;
-        gap: 1rem;
-        padding: 0.5rem;
-    }
-
-    .items > div {
-        font-size: smaller;
         background-color: var(--accent);
-        padding: 0.5rem;
-        border-radius: 0.5rem;
-        cursor: pointer;
     }
 </style>
 
-<div class="segmented">
-    <div class="items">
-        {#each elements as element, i}
-            <div on:click={() => {handleSelection(i)}}>{element}</div>
-        {/each}
-    </div>
-    <div class="currentPage">
-        <svelte:component this={pages[currentIndex]}/>
-    </div>
+<div class="segmented-picker" {...$$restProps}>
+    <slot/>
 </div>

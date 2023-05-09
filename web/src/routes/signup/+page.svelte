@@ -1,8 +1,25 @@
 <script>
-	import Navbar from "../../lib/Navbar.svelte";
 	import SegmentedPicker from "../../lib/SegmentedPicker.svelte";
+	import Segment from "../../lib/Segment.svelte";
 
+    let segmentedPickerChange;
+
+    function segmentedPickerSelectionChanged(event) {
+        const pages = document.querySelectorAll("[id^='segmented-page-']");
+        pages.forEach(page => {
+            page.style.display = "none";
+        });
+        const newPage = document.querySelector(`[id='segmented-page-${event.detail.index}']`);
+        if (newPage) {
+            newPage.style.display = "";
+        }
+    }
+
+    function changeSegmentedPickerSelection(index) {
+        segmentedPickerChange(index);
+    }
 </script>
+
 <style>
     .container {
         display: flex;
@@ -31,21 +48,28 @@
         width: 40ch;
     }
 
-    input[type="submit"] {
-        width: 20ch;
+    button {
+        width: 10ch;
     }
 </style>
 
+<title>Create your Tinder for Piffy&trade; account</title>
 <div class="container" style="">
     <h2>Create your Tinder for Piffy&trade; account</h2>
-    <SegmentedPicker elements={["Account information", "Your interests"]} pages={[Navbar, Navbar]}></SegmentedPicker>
-    <form onsubmit="event.preventDefault();">
+    <SegmentedPicker id="segmented-picker" selectedIndex={0} bind:changeSelection={segmentedPickerChange} on:selectionchanged={(event) => { segmentedPickerSelectionChanged(event); }}>
+        <Segment>Account Information</Segment>
+        <Segment isClickable={false}>Your interests</Segment>
+    </SegmentedPicker>
+    <form id="segmented-page-0">
         <input type="email" id="emailText" placeholder="E-Mail Address">
         <input type="text" id="usernameText" placeholder="Username">
         <input type="password" id="passwordText" placeholder="Password">
         <div>
-            <a href="/signup">Log in</a>
-            <input type="submit" value="Create account">
+            <a href="/login">Log in</a>
+            <button on:click={() => { changeSegmentedPickerSelection(1); }}>Next</button>
         </div>
     </form>
+    <div id="segmented-page-1" style="display: none;">
+        <h3>Choose your interests</h3>
+    </div>
 </div>

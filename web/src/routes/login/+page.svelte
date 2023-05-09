@@ -29,6 +29,7 @@
     }
 </style>
 
+<title>Log in to your Tinder for Piffy&trade; account</title>
 <div class="container" style="">
     <h2>Log in to your Tinder for Piffy&trade; account</h2>
     <form onsubmit="event.preventDefault();">

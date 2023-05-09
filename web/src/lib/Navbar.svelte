@@ -8,12 +8,21 @@
     ];
 
     $: selectedPage = $page.url.pathname;
+
+    function toggleProfileMenu() {
+        const profileMenu = document.querySelector("#profileMenu");
+        if (profileMenu.style.display == "flex") {
+            profileMenu.style.display = "none";
+        } else {
+            profileMenu.style.display = "flex";
+        }
+    }
 </script>
 
 <!-- Style -->
 <style>
     nav {
-        position: fixed;
+        position: sticky;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -25,27 +34,27 @@
         gap: 1rem;
     }
 
-    nav a {
+    nav .navbar-link {
         padding: 1rem;
         text-decoration: none;
         transition: .25s ease;
         color: whitesmoke;
     }
 
-    nav:hover a:not(:hover) {
+    nav:hover .navbar-link:not(:hover) {
         color: var(--darker-accent);
     }
 
-    nav:hover a:hover,
-    nav a[selected="true"] {
+    nav:hover .navbar-link:hover,
+    nav .navbar-link[selected="true"] {
         color: white;
     }
     
-    nav:hover a:hover {
+    nav:hover .navbar-link:hover {
         box-shadow: 0 2px 0 0 var(--lighter-accent);
     }
     
-    nav a[selected="true"] {
+    nav .navbar-link[selected="true"] {
         box-shadow: 0 2px 0 0 var(--darker-accent);
         font-weight: 500;
     }
@@ -55,17 +64,45 @@
         align-items: center;
         gap: 1rem;
     }
+
+    #profileMenuHolder {
+        position: relative;
+    }
+
+    #profileMenu {
+        width: 20ch;
+        display: none;
+        flex-direction: column;
+        gap: 1rem;
+        overflow: hidden;
+        background-color: var(--accent);
+        padding: 1rem;
+        position: absolute;
+        right: 0;
+        top: 3.2rem;
+    }
+
+    .profile-link {
+        color: black;
+    }
 </style>
 
 <!-- HTML -->
 <nav>
     <div>
-        <h2 style="margin: 0;">Tinder for Piffy</h2>
+        <h2 style="margin: 0;">Tinder for Piffy&trade;</h2>
         {#each pages as page}
-            <a href="{page.pageUrl}" selected={selectedPage == page.pageUrl ? "true" : "false"}>{page.pageName}</a>
+            <a href="{page.pageUrl}" selected={selectedPage == page.pageUrl ? "true" : "false"} class="navbar-link">{page.pageName}</a>
         {/each}
     </div>
-    <div>
-        <a href="/login" selected={selectedPage == "/login" ? "true" : "false"}>Login</a>
+    <div id="profileMenuHolder">
+        <button on:click={toggleProfileMenu} style="all: unset; padding: 0.5rem !important; cursor: pointer !important;" class="navbar-link">
+            <img src="https://github.com/favicon.ico" alt="Your profile icon" style="height: 2rem;"/>
+        </button>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div id="profileMenu" on:click={toggleProfileMenu}>
+            <a href="/profile" class="profile-link">Your profile</a>
+            <a href="/login" class="profile-link">Login</a>
+        </div>
     </div>
 </nav>
