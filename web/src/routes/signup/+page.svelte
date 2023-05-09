@@ -1,6 +1,7 @@
 <script>
 	import SegmentedPicker from "../../lib/SegmentedPicker.svelte";
 	import Segment from "../../lib/Segment.svelte";
+	import InterestToggle from "../../lib/InterestToggle.svelte";
 
     let segmentedPickerChange;
 
@@ -11,7 +12,7 @@
         });
         const newPage = document.querySelector(`[id='segmented-page-${event.detail.index}']`);
         if (newPage) {
-            newPage.style.display = "";
+            newPage.style.display = "flex";
         }
     }
 
@@ -51,6 +52,12 @@
     button {
         width: 10ch;
     }
+
+    .interests-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+    }
 </style>
 
 <title>Create your Tinder for Piffy&trade; account</title>
@@ -69,7 +76,17 @@
             <button on:click={() => { changeSegmentedPickerSelection(1); }}>Next</button>
         </div>
     </form>
-    <div id="segmented-page-1" style="display: none;">
+    <div id="segmented-page-1" style="display: none; flex-direction: column; align-items: center;">
         <h3>Choose your interests</h3>
+        <div class="interests-grid">
+            <InterestToggle image={"https://github.com/favicon.ico"} label={"test"}></InterestToggle>
+            <InterestToggle image={"https://github.com/favicon.ico"} label={"test"}></InterestToggle>
+            <InterestToggle image={"https://github.com/favicon.ico"} label={"test"}></InterestToggle>
+            <InterestToggle image={"https://github.com/favicon.ico"} label={"test"}></InterestToggle>
+            <InterestToggle image={"https://github.com/favicon.ico"} label={"test"}></InterestToggle>
+            <InterestToggle image={"https://github.com/favicon.ico"} label={"test"}></InterestToggle>
+            <InterestToggle image={"https://github.com/favicon.ico"} label={"test"}></InterestToggle>
+            <InterestToggle image={"https://github.com/favicon.ico"} label={"test"}></InterestToggle>
+        </div>
     </div>
 </div>

@@ -6,7 +6,6 @@
 
     export let selectedIndex = 0;
     export const changeSelection = (index) => {
-        console.log(selectedIndex, index);
         select(index);
     }
 
