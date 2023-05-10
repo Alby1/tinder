@@ -6,5 +6,6 @@ from cassandra.cqlengine.models import Model
 import uuid
 
 def create_entry(data: dict, model: Model) -> models.Utente:
-    data.id = str(uuid.uuid1())
+    data['id'] = str(uuid.uuid1())
+    print(data)
     return model.create(**data)
