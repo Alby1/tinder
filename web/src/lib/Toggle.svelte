@@ -1,21 +1,41 @@
 <script>
-    
+    import { getContext, onMount } from "svelte";
+
     export let label;
     export let image;
+    export let checked = false;
 
-    $: isChecked = false;
+    const context = getContext("ToggleGroup");
+    let thisToggle;
+
+    $: isChecked = checked;
+
+    onMount(() => {
+        context.addToggle(thisToggle);
+    });
+
+    function toggle() {
+        isChecked = !isChecked;
+        if (isChecked) {
+            context.addSelected(thisToggle);
+        } else {
+            context.removeSelected(thisToggle);
+        }
+    }
 </script>
 
 <style>
     button {
         position: relative;
-        width: 6rem;
+        width: 8rem;
         aspect-ratio: 1;
         background-color: transparent;
         border: 1px solid black;
         background-repeat: no-repeat;
         background-size: cover;
+        background-position: center;
         border-radius: 1rem;
+        cursor: pointer;
     }
     
     button[aria-checked="true"]::before {
@@ -45,7 +65,8 @@
     aria-checked={isChecked}
     on:click
     on:click|preventDefault={() => {
-        isChecked = !isChecked;
-    }}>
-    <div style="background-color: {isChecked ? 'black' : 'white'}; color: {isChecked ? 'white' : 'black'}">{label}</div>
+        toggle();
+    }}
+    bind:this={thisToggle}>
+    <div style="background-color: {isChecked ? 'var(--accent)' : 'white'}; color: {isChecked ? 'white' : 'black'}">{label}</div>
 </button>
