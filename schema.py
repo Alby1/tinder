@@ -3,7 +3,8 @@ from typing import Optional
 from pydantic import BaseModel
 
 class Utente(BaseModel):
-    id: UUID
+    id: Optional[UUID]
     nome: Optional[str]
+    # non opzional ↓
     cognome: Optional[str]
-    password: Optional[str] # non opzional
+    password: Optional[str]

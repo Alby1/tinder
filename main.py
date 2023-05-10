@@ -3,10 +3,13 @@ from cassandra.cqlengine.management import sync_table
 from typing import List
 
 import uvicorn
+import json
+import bcrypt
 
 import db
 import models
 import schema
+import crud
 
 app = FastAPI()
 
@@ -24,6 +27,12 @@ def root():
 @app.get("/test", response_model=List[schema.Utente])
 def test():
     return list(models.Utente.objects.all())
+
+@app.get("/users/add", response_model=schema.Utente)
+def user_add(data: schema.Utente):
+    data.password = bcrypt.hashpw(data.password.encode('utf8'), bcrypt.gensalt())
+    return crud.create_entry(data, models.Utente)
+    return "ciao"
 
 
 if __name__ == "__main__":
