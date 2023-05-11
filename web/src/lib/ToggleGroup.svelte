@@ -1,17 +1,31 @@
 <script>
-    import { setContext, onMount } from "svelte";
+    import { setContext, onMount, createEventDispatcher } from "svelte";
 
-    let selectedElements = [];
+    const dispatch = createEventDispatcher();
+
+    let selectedValues = [];
     let toggles = [];
 
     export let columns = 4;
 
     setContext("ToggleGroup", {
-        addSelected: (element) => {
-            selectedElements.push(element);
+        addSelected: (newValue) => {
+            selectedValues.push(newValue);
+            dispatch('selectedvalueschanged', {
+                values: selectedValues
+            });
+            dispatch('selectedvalueadded', {
+                addedValue: newValue
+            });
         },
-        removeSelected: (element) => {
-            selectedElements.splice(selectedElements.indexOf(element), 1);
+        removeSelected: (oldValue) => {
+            selectedValues.splice(selectedValues.indexOf(oldValue), 1);
+            dispatch('selectedvalueschanged', {
+                values: selectedValues
+            });
+            dispatch('selectedvalueremoved', {
+                removedValue: oldValue
+            });
         },
         addToggle: (toggle) => {
             toggles = [...toggles, toggle];

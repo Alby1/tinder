@@ -4,6 +4,7 @@
     export let label;
     export let image;
     export let checked = false;
+    export let value;
 
     const context = getContext("ToggleGroup");
     let thisToggle;
@@ -17,9 +18,9 @@
     function toggle() {
         isChecked = !isChecked;
         if (isChecked) {
-            context.addSelected(thisToggle);
+            context.addSelected(value);
         } else {
-            context.removeSelected(thisToggle);
+            context.removeSelected(value);
         }
     }
 </script>

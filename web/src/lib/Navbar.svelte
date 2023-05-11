@@ -97,7 +97,7 @@
     </div>
     <div id="profileMenuHolder">
         <button on:click={toggleProfileMenu} style="all: unset; padding: 0.5rem !important; cursor: pointer !important;" class="navbar-link">
-            <img src="https://github.com/favicon.ico" alt="Your profile icon" style="height: 2rem;"/>
+            <img src="/icons/user.svg" alt="Your profile icon" style="height: 2rem;"/>
         </button>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div id="profileMenu" on:click={toggleProfileMenu}>

@@ -21,10 +21,6 @@
     function changeSegmentedPickerSelection(index) {
         segmentedPickerChange(index);
     }
-
-    function selectedInterestsChanged(event) {
-
-    }
 </script>
 
 <style>
@@ -61,7 +57,7 @@
 </style>
 
 <title>Create your Tinder for Piffy&trade; account</title>
-<div class="container" style="">
+<div class="container">
     <h2>Create your Tinder for Piffy&trade; account</h2>
     <SegmentedPicker id="segmented-picker" selectedIndex={0} bind:changeSelection={segmentedPickerChange} on:selectionchanged={(event) => { segmentedPickerSelectionChanged(event); }}>
         <Segment>Account Information</Segment>
@@ -78,18 +74,22 @@
     </form>
     <div id="segmented-page-1" style="display: none; flex-direction: column; align-items: center;">
         <h3>Choose your interests</h3>
-        <ToggleGroup columns={4} on:selectedChanged={(event) => { selectedInterestsChanged(event); }}>
-            <Toggle image={"https://www.donnad.it/sites/default/files/styles/r_visual_d/public/201940/collare-gatto-fai-da-te.jpg?itok=mY94HKXz"} label={"Animals"}></Toggle>
-            <Toggle image={"https://cfx-wp-images.imgix.net/2017/11/DSC_0359.jpg?auto=compress%2Cformat&ixlib=php-3.3.0&s=ab2859378f945466c7393d28c535a97c"} label={"Cars"}></Toggle>
-            <Toggle image={"https://academiabrasileiradeartes.org.br/wp-content/uploads/2021/05/tipos-de-arte-og.jpg"} label={"Arts"}></Toggle>
-            <Toggle image={"https://staticg.sportskeeda.com/editor/2023/01/a319f-16742565001864-1920.jpg"} label={"Anime"}></Toggle>
-            <Toggle image={"https://green-paths.com/wp-content/uploads/2021/05/Regalare-un-albero.png"} label={"Outdoors"}></Toggle>
-            <Toggle image={"https://www.ibs.it/images/8716309087612_0_0_150_0_75.jpg"} label={"Videogames"}></Toggle>
-            <Toggle image={"https://static.javatpoint.com/blog/images/advantages-and-disadvantages-of-information-technology2.jpg"} label={"Technology"}></Toggle>
-            <Toggle image={"https://cdn.shopify.com/s/files/1/0005/1435/9356/files/01What_s_the_problem_with_travelling_and_film_photography_1024x1024.jpg?v=1655975765"} label={"Travelling"}></Toggle>
-            <Toggle image={"https://cdn.britannica.com/25/193725-131-436D7C6C/sheet-music.jpg"} label={"Music"}></Toggle>
-            <Toggle image={"https://im.hunt.in/cg/Jamalpur/City-Guide/eyelex.jpg"} label={"Cinema"}></Toggle>
-            <Toggle image={"https://www.lifefitness.com/resource/image/1577926/portrait_ratio1x1/600/600/108d55725fc7dd0385f7176be6f523b2/aS/run-cx-treadmill-life-fitness-man-running-stride-edited-final-2000x1300.jpg"} label={"Fitness"}></Toggle>
+        <ToggleGroup
+            columns={4}
+            on:selectedvalueadded={(event) => { selectedInterests.push(event.detail.addedValue); }}
+            on:selectedvalueremoved={(event) => { selectedInterests.splice(selectedInterests.indexOf(event.detail.removedValue), 1); }}
+            >
+            <Toggle image={"https://www.donnad.it/sites/default/files/styles/r_visual_d/public/201940/collare-gatto-fai-da-te.jpg?itok=mY94HKXz"} label={"Animals"} value={0}></Toggle>
+            <Toggle image={"https://cfx-wp-images.imgix.net/2017/11/DSC_0359.jpg?auto=compress%2Cformat&ixlib=php-3.3.0&s=ab2859378f945466c7393d28c535a97c"} label={"Cars"} value={1}></Toggle>
+            <Toggle image={"https://academiabrasileiradeartes.org.br/wp-content/uploads/2021/05/tipos-de-arte-og.jpg"} label={"Arts"} value={2}></Toggle>
+            <Toggle image={"https://staticg.sportskeeda.com/editor/2023/01/a319f-16742565001864-1920.jpg"} label={"Anime"} value={3}></Toggle>
+            <Toggle image={"https://green-paths.com/wp-content/uploads/2021/05/Regalare-un-albero.png"} label={"Outdoors"} value={4}></Toggle>
+            <Toggle image={"https://www.ibs.it/images/8716309087612_0_0_150_0_75.jpg"} label={"Videogames"} value={5}></Toggle>
+            <Toggle image={"https://static.javatpoint.com/blog/images/advantages-and-disadvantages-of-information-technology2.jpg"} label={"Technology"} value={6}></Toggle>
+            <Toggle image={"https://cdn.shopify.com/s/files/1/0005/1435/9356/files/01What_s_the_problem_with_travelling_and_film_photography_1024x1024.jpg?v=1655975765"} label={"Travelling"} value={7}></Toggle>
+            <Toggle image={"https://cdn.britannica.com/25/193725-131-436D7C6C/sheet-music.jpg"} label={"Music"} value={8}></Toggle>
+            <Toggle image={"https://im.hunt.in/cg/Jamalpur/City-Guide/eyelex.jpg"} label={"Cinema"} value={9}></Toggle>
+            <Toggle image={"https://www.lifefitness.com/resource/image/1577926/portrait_ratio1x1/600/600/108d55725fc7dd0385f7176be6f523b2/aS/run-cx-treadmill-life-fitness-man-running-stride-edited-final-2000x1300.jpg"} label={"Fitness"} value={10}></Toggle>
         </ToggleGroup>
     </div>
 </div>
