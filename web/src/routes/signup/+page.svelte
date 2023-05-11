@@ -1,25 +1,24 @@
 <script>
-	import SegmentedPicker from "../../lib/SegmentedPicker.svelte";
-	import Segment from "../../lib/Segment.svelte";
-	import Toggle from "../../lib/Toggle.svelte";
+	import DottedProgress from "../../lib/DottedProgress.svelte";
+    import Toggle from "../../lib/Toggle.svelte";
 	import ToggleGroup from "../../lib/ToggleGroup.svelte";
 
-    let segmentedPickerChange;
+    let dottedProgressChange;
     let selectedInterests = [];
 
-    function segmentedPickerSelectionChanged(event) {
-        const pages = document.querySelectorAll("[id^='segmented-page-']");
+    function dottedProgressSelectionChanged(event) {
+        const pages = document.querySelectorAll("[id^='dotted-page-']");
         pages.forEach(page => {
             page.style.display = "none";
         });
-        const newPage = document.querySelector(`[id='segmented-page-${event.detail.index}']`);
+        const newPage = document.querySelector(`[id='dotted-page-${event.detail.index}']`);
         if (newPage) {
             newPage.style.display = "flex";
         }
     }
 
-    function changeSegmentedPickerSelection(index) {
-        segmentedPickerChange(index);
+    function changeDottedProgressSelection(index) {
+        dottedProgressChange(index);
     }
 </script>
 
@@ -30,7 +29,7 @@
         align-items: center;
     }
 
-    form {
+    [id^='dotted-page-'] {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -38,7 +37,7 @@
         margin-top: 1rem;
     }
 
-    form > div {
+    [id^='dotted-page-'] > div {
         width: 100%;
         display: flex;
         justify-content: space-between;
@@ -59,20 +58,18 @@
 <title>Create your Tinder for Piffy&trade; account</title>
 <div class="container">
     <h2>Create your Tinder for Piffy&trade; account</h2>
-    <SegmentedPicker id="segmented-picker" selectedIndex={0} bind:changeSelection={segmentedPickerChange} on:selectionchanged={(event) => { segmentedPickerSelectionChanged(event); }}>
-        <Segment>Account Information</Segment>
-        <Segment isClickable={false}>Your interests</Segment>
-    </SegmentedPicker>
-    <form id="segmented-page-0">
+    <DottedProgress count={2} bind:changeSelection={dottedProgressChange} on:selectionchanged={(event) => { dottedProgressSelectionChanged(event); }}></DottedProgress>
+    <form id="dotted-page-0">
+        <h3>Account Information</h3>
         <input type="email" id="emailText" placeholder="E-Mail Address">
         <input type="text" id="usernameText" placeholder="Username">
         <input type="password" id="passwordText" placeholder="Password">
         <div>
             <a href="/login">Log in</a>
-            <button on:click={() => { changeSegmentedPickerSelection(1); }}>Next</button>
+            <button on:click={() => { changeDottedProgressSelection(1); }}>Next</button>
         </div>
     </form>
-    <div id="segmented-page-1" style="display: none; flex-direction: column; align-items: center;">
+    <div id="dotted-page-1" style="display: none; flex-direction: column; align-items: center;">
         <h3>Choose your interests</h3>
         <ToggleGroup
             columns={4}
@@ -91,5 +88,9 @@
             <Toggle image={"https://im.hunt.in/cg/Jamalpur/City-Guide/eyelex.jpg"} label={"Cinema"} value={9}></Toggle>
             <Toggle image={"https://www.lifefitness.com/resource/image/1577926/portrait_ratio1x1/600/600/108d55725fc7dd0385f7176be6f523b2/aS/run-cx-treadmill-life-fitness-man-running-stride-edited-final-2000x1300.jpg"} label={"Fitness"} value={10}></Toggle>
         </ToggleGroup>
+        <div>
+            <button on:click={() => { changeDottedProgressSelection(0); }}>Back</button>
+            <button>Next</button>
+        </div>
     </div>
 </div>
