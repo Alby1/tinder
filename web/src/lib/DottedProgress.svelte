@@ -58,6 +58,6 @@
 
 <div class="dotted-progress">
     {#each items as item}
-        <div class="dotted-progress-item" style="background-color: {item == sIndex ? "var(--accent)" : item < sIndex ? "var(--darker-accent)" : "white"}; border: 1px solid {item == sIndex ? "var(--accent)" : item < sIndex ? "var(--darker-accent)" : "black"};"></div>
+        <div class="dotted-progress-item" style="background-color: {item == sIndex ? "var(--lighter-accent)" : item < sIndex ? "var(--darker-accent)" : "white"}; border: 1px solid {item == sIndex ? "var(--lighter-accent)" : item < sIndex ? "var(--darker-accent)" : "black"};"></div>
     {/each}
 </div>

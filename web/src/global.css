@@ -10,20 +10,25 @@ main {
 input[type="text"],
 input[type="password"],
 input[type="email"],
+input[type="date"],
 input[type="submit"],
 input[type="button"],
+select,
 button {
     padding: 0.5rem;
     border-radius: 0.75rem;
     border: 2px solid var(--accent);
     outline: none;
+    background-color: whitesmoke;
 }
 
 input[type="text"]:focus-visible,
 input[type="password"]:focus-visible,
 input[type="email"]:focus-visible,
+input[type="date"]:focus-visible,
 input[type="submit"]:focus-visible,
 input[type="button"]:focus-visible,
+select:focus-visible,
 button:focus-visible {
     border: 2px solid var(--darker-accent);
 }

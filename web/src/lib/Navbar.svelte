@@ -38,7 +38,7 @@
         padding: 1rem;
         text-decoration: none;
         transition: .25s ease;
-        color: whitesmoke;
+        color: black;
     }
 
     nav:hover .navbar-link:not(:hover) {
@@ -47,7 +47,7 @@
 
     nav:hover .navbar-link:hover,
     nav .navbar-link[selected="true"] {
-        color: white;
+        color: black;
     }
     
     nav:hover .navbar-link:hover {
@@ -83,7 +83,7 @@
     }
 
     .profile-link {
-        color: black;
+        color: unset;
     }
 </style>
 

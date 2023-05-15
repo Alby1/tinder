@@ -5,6 +5,7 @@
     export let image;
     export let checked = false;
     export let value;
+    export let size = 4;
 
     const context = getContext("ToggleGroup");
     let thisToggle;
@@ -28,7 +29,6 @@
 <style>
     button {
         position: relative;
-        width: 8rem;
         aspect-ratio: 1;
         background-color: transparent;
         border: 1px solid black;
@@ -61,7 +61,7 @@
     }
 </style>
 
-<button style="background-image: url({image});"
+<button style="background-image: url({image}); width: {size}rem;"
     role="checkbox"
     aria-checked={isChecked}
     on:click
