@@ -31,6 +31,7 @@ Macchi Alberto:
 - documentazione backend 
 - gestione db
 - project manager
+
 Schiavone Antonio:
 - frontend
 - documentazione frontend 
