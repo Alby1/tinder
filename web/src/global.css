@@ -20,6 +20,13 @@ button {
     border: 2px solid var(--accent);
     outline: none;
     background-color: whitesmoke;
+    transition: background-color 250ms;
+    transition: border-color 300ms;
+}
+
+button:hover {
+    background-color: var(--accent);
+    border-color: var(--lighter-accent);
 }
 
 input[type="text"]:focus-visible,
