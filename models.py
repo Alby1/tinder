@@ -4,15 +4,17 @@ from cassandra.cqlengine.models import Model
 class Utente(Model):
     __keyspace__ = "tinder"
     id = columns.Text(primary_key=True, required=True)
-    nome = columns.Text()
-    cognome = columns.Text()
-    password = columns.Text()
-    nascita = columns.Date()
+    nome = columns.Text(required=True)
+    cognome = columns.Text(required=True)
+    mail = columns.Text(required=True, custom_index=True)
+    password = columns.Text(required=True)
+    nascita = columns.Text(required=True)
+    genere = columns.Boolean()
+    interessi = columns.List(columns.Text(), required=True)
+    token = columns.Text(required=True, custom_index=True)
 
 
-class Altra(Model):
-    __keyspace__ = "tinder"
+class Interesse(Model):
+    __keyspace__ = 'tinder'
     id = columns.Text(primary_key=True, required=True)
-    a = columns.Text()
-    b = columns.Text()
-    c = columns.Text()
+    nome = columns.Text(required=True)

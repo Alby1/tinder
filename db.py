@@ -18,7 +18,7 @@ def get_cluster():
     
 def get_session():
     cluster = get_cluster()
-    session = cluster.connect()
+    session = cluster.connect('tinder')
     register_connection(str(session), session=session)
     set_default_connection(str(session))
     return session

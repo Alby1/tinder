@@ -9,3 +9,4 @@ pandas
 requests_html
 selenium
 bcrypt
+secrets
