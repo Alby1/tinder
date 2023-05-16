@@ -2,36 +2,36 @@ from fastapi import FastAPI, Response, status
 from cassandra.cqlengine.management import sync_table, drop_table
 from typing import List
 
-import uvicorn
 import bcrypt
 import secrets
+import uvicorn
 
-import db
-import models
-import schema
-import crud
+from .db import get_session
+from .models import Interesse, Utente 
+from .schema import Utente, Interesse, Utente_edit
+from .crud import create_entry
 
 app = FastAPI()
 
 @app.on_event("startup")
 def startup():
     global session
-    session = db.get_session()
-    sync_table(models.Utente)
-    sync_table(models.Interesse)
+    session = get_session()
+    sync_table(Utente)
+    sync_table(Interesse)
 
 
 @app.get("/")
 def root():
     return {"response": "hello world!"}
 
-@app.post("/users/add", response_model=schema.Utente)
-def user_add(data: schema.Utente):
+@app.post("/users/add", response_model=Utente)
+def user_add(data: Utente):
     data.password = bcrypt.hashpw(data.password.encode('utf8'), bcrypt.gensalt()).decode('utf8')
-    return crud.create_entry(dict(data), models.Utente)
+    return create_entry(dict(data), Utente)
 
 @app.post("/users/edit")
-def user_edit(response: Response, data: schema.Utente_edit):
+def user_edit(response: Response, data: Utente_edit):
     utente = session.execute("SELECT * FROM utente WHERE mail = %s ALLOW FILTERING", [data.mail]).one()
     try:
         data = dict(data)
@@ -45,9 +45,9 @@ def user_edit(response: Response, data: schema.Utente_edit):
     response.status_code = status.HTTP_401_UNAUTHORIZED
     return {"outcome": "invalid"}
 
-@app.get("/users", response_model=List[schema.Utente])
+@app.get("/users", response_model=List[Utente])
 def get_users():
-    return list(models.Utente.objects.all())
+    return list(Utente.objects.all())
 
 @app.get("/users/auth", response_model=dict)
 def auth(response: Response, mail: str, password: str):
@@ -74,13 +74,14 @@ def checkauth(response: Response, mail: str, token: str):
     return {"outcome" : "invalid"}
 
 
-@app.get("/interests", response_model=List[schema.Interesse])
+@app.get("/interests", response_model=List[Interesse])
 def get_interessi():
-    return list(models.Interesse.objects.all())
+    return list(Interesse.objects.all())
 
-@app.post("/interests/add", response_model=schema.Interesse)
-def add_interess(data: schema.Utente):
-    return crud.create_entry(dict(data), models.Interesse)
+@app.post("/interests/add", response_model=Interesse)
+def add_interess(data: Utente):
+    return create_entry(dict(data), Interesse)
+
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", reload=True, host="0.0.0.0", port=5000)
+    uvicorn.run("server:app", reload=True, host="0.0.0.0", port=5000)
