@@ -45,7 +45,7 @@ def user_edit(response: Response, data: Utente_edit):
     response.status_code = status.HTTP_401_UNAUTHORIZED
     return {"outcome": "invalid"}
 
-@app.get("/users", response_model=List[Utente])
+@app.get("/users", response_model=List[Utente_])
 def get_users():
     return list(Utente.objects.all())
 
