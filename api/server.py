@@ -8,7 +8,7 @@ import uvicorn
 
 from .db import get_session
 from .models import Interesse, Utente 
-from .schema import Utente, Interesse, Utente_edit
+from .schema import Utente as Utente_, Interesse as Interesse_, Utente_edit
 from .crud import create_entry
 
 app = FastAPI()
@@ -25,8 +25,8 @@ def startup():
 def root():
     return {"response": "hello world!"}
 
-@app.post("/users/add", response_model=Utente)
-def user_add(data: Utente):
+@app.post("/users/add", response_model=Utente_)
+def user_add(data: Utente_):
     data.password = bcrypt.hashpw(data.password.encode('utf8'), bcrypt.gensalt()).decode('utf8')
     return create_entry(dict(data), Utente)
 
@@ -74,14 +74,12 @@ def checkauth(response: Response, mail: str, token: str):
     return {"outcome" : "invalid"}
 
 
-@app.get("/interests", response_model=List[Interesse])
+@app.get("/interests", response_model=List[Interesse_])
 def get_interessi():
     return list(Interesse.objects.all())
 
-@app.post("/interests/add", response_model=Interesse)
-def add_interess(data: Utente):
+@app.post("/interests/add", response_model=Interesse_)
+def add_interess(data: Interesse_):
     return create_entry(dict(data), Interesse)
 
 
-if __name__ == "__main__":
-    uvicorn.run("server:app", reload=True, host="0.0.0.0", port=5000)
