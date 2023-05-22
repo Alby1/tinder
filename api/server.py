@@ -46,8 +46,10 @@ def user_edit(response: Response, data: Utente_edit):
     return {"outcome": "invalid"}
 
 @app.get("/users", response_model=List[Utente_])
-def get_users():
-    return list(Utente.objects.all())
+def get_users(response: Response):
+    response.status_code = status.HTTP_401_UNAUTHORIZED
+    return "unallowed"
+    # return list(Utente.objects.all())
 
 @app.get("/users/auth", response_model=dict)
 def auth(response: Response, mail: str, password: str):
@@ -79,7 +81,7 @@ def get_interessi():
     return list(Interesse.objects.all())
 
 @app.post("/interests/add", response_model=Interesse_)
-def add_interess(data: Interesse_):
+def add_interesse(data: Interesse_):
     return create_entry(dict(data), Interesse)
 
 
