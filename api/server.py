@@ -32,14 +32,16 @@ def user_add(data: Utente_):
 
 @app.post("/users/edit")
 def user_edit(response: Response, data: Utente_edit):
-    utente = session.execute("SELECT * FROM utente WHERE mail = %s ALLOW FILTERING", [data.mail]).one()
+    utente = session.execute('SELECT * FROM utente WHERE "token" = %s ALLOW FILTERING', [data.token]).one()
+    print(utente)
     try:
         data = dict(data)
-        #print(data)
+        print(data)
         for key in data.keys():
-            if data[key] is not None and key != "mail":
-                print(data[key])
-                session.execute(f'UPDATE utente SET "{key}" = \'{data[key]}\' WHERE "id" = \'{utente["id"]}\'')
+            if (data[key] is not None and data[key] != '' and data[key] != []) and key != "token":
+                print(key, data[key])
+                d = f"{data[key]}" if type(data[key]) in [list, bool] else f"'{data[key]}'"
+                session.execute(f'UPDATE utente SET "{key}" = {d} WHERE "id" = \'{utente["id"]}\'')
         return {"outcome" : "valid"}
     except Exception as e: print(e)
     response.status_code = status.HTTP_401_UNAUTHORIZED
@@ -48,8 +50,8 @@ def user_edit(response: Response, data: Utente_edit):
 @app.get("/users", response_model=List[Utente_])
 def get_users(response: Response):
     response.status_code = status.HTTP_401_UNAUTHORIZED
-    return "unallowed"
-    # return list(Utente.objects.all())
+    #return [Utente()]
+    return list(Utente.objects.all())
 
 @app.get("/users/auth", response_model=dict)
 def auth(response: Response, mail: str, password: str):
