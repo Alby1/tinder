@@ -9,9 +9,11 @@ class Utente(Model):
     mail = columns.Text(required=True, custom_index=True)
     password = columns.Text(required=True)
     nascita = columns.Text(required=True)
-    genere = columns.Boolean()
+    genere = columns.Boolean(required=True)
     interessi = columns.List(columns.Text(), required=True)
     token = columns.Text(required=True, custom_index=True)
+    admin = columns.Boolean(required=True, custom_index=True, default=False)
+    previously_matched = columns.List(columns.Text(), required=True)
 
 
 class Interesse(Model):

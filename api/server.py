@@ -1,14 +1,13 @@
 from fastapi import FastAPI, Response, status
 from cassandra.cqlengine.management import sync_table, drop_table
-from typing import List
+from typing import List, Optional
 
 import bcrypt
 import secrets
-import uvicorn
 
 from .db import get_session
 from .models import Interesse, Utente 
-from .schema import Utente as Utente_, Interesse as Interesse_, Utente_edit
+from .schema import Utente as Utente_, Interesse as Interesse_, Utente_edit, Interesse_edit
 from .crud import create_entry
 
 app = FastAPI()
@@ -28,6 +27,7 @@ def root():
 @app.post("/users/add", response_model=Utente_)
 def user_add(data: Utente_):
     data.password = bcrypt.hashpw(data.password.encode('utf8'), bcrypt.gensalt()).decode('utf8')
+    data.nascita()
     return create_entry(dict(data), Utente)
 
 @app.post("/users/edit")
@@ -38,7 +38,7 @@ def user_edit(response: Response, data: Utente_edit):
         data = dict(data)
         print(data)
         for key in data.keys():
-            if (data[key] is not None and data[key] != '' and data[key] != []) and key != "token":
+            if (data[key] is not None and data[key] != '' and data[key] != []) and (key != "token" and key != "admin"):
                 print(key, data[key])
                 d = f"{data[key]}" if type(data[key]) in [list, bool] else f"'{data[key]}'"
                 session.execute(f'UPDATE utente SET "{key}" = {d} WHERE "id" = \'{utente["id"]}\'')
@@ -47,11 +47,14 @@ def user_edit(response: Response, data: Utente_edit):
     response.status_code = status.HTTP_401_UNAUTHORIZED
     return {"outcome": "invalid"}
 
-@app.get("/users", response_model=List[Utente_])
-def get_users(response: Response):
+@app.get("/users", response_model=Optional[List[Utente_]])
+def get_users(response: Response, token: str):
+    utente: Utente = session.execute('SELECT * FROM utente WHERE "token" = %s ALLOW FILTERING', [token]).one()
+    if utente:
+        if utente['admin']:
+            return list(Utente.objects.all())
     response.status_code = status.HTTP_401_UNAUTHORIZED
-    #return [Utente()]
-    return list(Utente.objects.all())
+    return None
 
 @app.get("/users/auth", response_model=dict)
 def auth(response: Response, mail: str, password: str):
@@ -83,7 +86,33 @@ def get_interessi():
     return list(Interesse.objects.all())
 
 @app.post("/interests/add", response_model=Interesse_)
-def add_interesse(data: Interesse_):
-    return create_entry(dict(data), Interesse)
+def add_interesse(data: Interesse_, token: str, response: Response):
+    utente: Utente = session.execute('SELECT * FROM utente WHERE "token" = %s ALLOW FILTERING', [token]).one()
+    if utente:
+        if utente['admin']:
+            return create_entry(dict(data), Interesse)
+    response.status_code = status.HTTP_401_UNAUTHORIZED
+    return None
 
+@app.post("/interests/edit")
+def edit_interesse(data: Interesse_edit, token:str, response: Response):
+    utente: Utente = session.execute('SELECT * FROM utente WHERE "token" = %s ALLOW FILTERING', [token]).one()
+    if utente:
+        if utente['admin']:
+            data = dict(data)
+            for key in data.keys():
+                if (data[key] is not None and data[key] != '' and data[key] != []) and (key != "id"):
+                    print(key, data[key])
+                    d = f"{data[key]}" if type(data[key]) in [list, bool] else f"'{data[key]}'"
+                    session.execute(f'UPDATE interesse SET "{key}" = {d} WHERE "id" = \'{data["id"]}\'')
+            return {"outcome": "valid"}
+    response.status_code = status.HTTP_401_UNAUTHORIZED
+    return {"outcome": "invalid"}
+
+
+@app.get("/users/match")
+async def match_users(token: str, response: Response):
+    utente: Utente = session.execute('SELECT * FROM utente WHERE "token" = %s ALLOW FILTERING', [token]).one()
+    # prendo altro utente?
+    print(utente)
 

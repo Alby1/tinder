@@ -11,8 +11,10 @@ class Utente(BaseModel):
     password: str = ""
     nascita: int | str = ""
     interessi: list[str] = []
-    genere: bool = False # vero = uomo; falso = donna
+    genere: bool # vero = uomo; falso = donna
     token: Optional[str] = "empty"
+    admin: bool = False
+    previously_matched: list[str] = []
 
     def nascita(self):
         if type(self.nascita) is str:
@@ -27,9 +29,14 @@ class Utente_edit(BaseModel):
     password: Optional[str] = ""
     nascita: Optional[int] | Optional[str] = ""
     interessi: Optional[list[str]] = []
-    genere: Optional[bool] = False # vero = uomo; falso = donna
+    genere: Optional[bool] = None # vero = uomo; falso = donna
     token: str = "empty"
+    admin: Optional[bool] = None
 
 class Interesse(BaseModel):
     id: Optional[UUID]
+    nome: str
+
+class Interesse_edit(BaseModel):
+    id: UUID
     nome: str
