@@ -33,13 +33,10 @@ def user_add(data: Utente_):
 @app.post("/users/edit")
 def user_edit(response: Response, data: Utente_edit):
     utente = session.execute('SELECT * FROM utente WHERE "token" = %s ALLOW FILTERING', [data.token]).one()
-    print(utente)
     try:
         data = dict(data)
-        print(data)
         for key in data.keys():
             if (data[key] is not None and data[key] != '' and data[key] != []) and (key != "token" and key != "admin"):
-                print(key, data[key])
                 d = f"{data[key]}" if type(data[key]) in [list, bool] else f"'{data[key]}'"
                 session.execute(f'UPDATE utente SET "{key}" = {d} WHERE "id" = \'{utente["id"]}\'')
         return {"outcome" : "valid"}
@@ -102,7 +99,6 @@ def edit_interesse(data: Interesse_edit, token:str, response: Response):
             data = dict(data)
             for key in data.keys():
                 if (data[key] is not None and data[key] != '' and data[key] != []) and (key != "id"):
-                    print(key, data[key])
                     d = f"{data[key]}" if type(data[key]) in [list, bool] else f"'{data[key]}'"
                     session.execute(f'UPDATE interesse SET "{key}" = {d} WHERE "id" = \'{data["id"]}\'')
             return {"outcome": "valid"}
