@@ -133,9 +133,25 @@ async def match_users(token: str, response: Response):
     return disponibili
 
 @app.get("/users/like")
-async def like_user(token: str, altro: str, likes: bool, response: Response):
+def like_user(token: str, altro: str, likes: bool, response: Response):
     utente: list = session.execute(f'SELECT {("likes" if likes else "dislikes")} FROM utente WHERE "token" = {token} ALLOW FILTERING').one()
-
+    if not utente:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {"outcome": "invalid"}
+    
     utente.append(altro)
-    session.execute(f'update utente set {("likes" if likes else "dislikes")} = {utente} where "token" = {token}')
+    session.execute(f'UPDATE utente SET {("likes" if likes else "dislikes")} = {utente} WHERE "token" = {token}')
+    return {"outcome": "valid"}
+        
 
+@app.post("/users/grantadmin")
+def user_grant_admin(token: str, altro: str, admin: bool, response: Response):
+    utente: Utente = session.execute('SELECT * FROM utente WHERE "token" = %s ALLOW FILTERING', [token]).one()
+    
+    if utente:
+        if utente['admin']:
+                    session.execute(f'UPDATE interesse SET "admin" = {admin} WHERE "id" = \'{altro}\'')
+                    return {"outcome": "valid"}
+            
+    response.status_code = status.HTTP_401_UNAUTHORIZED
+    return {"outcome": "invalid"}
