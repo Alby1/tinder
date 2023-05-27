@@ -13,7 +13,6 @@ class Utente(Model):
     interessi = columns.List(columns.Text(), required=True, custom_index=True)
     token = columns.Text(required=True, custom_index=True)
     admin = columns.Boolean(required=True, custom_index=True, default=False)
-    previously_matched = columns.List(columns.Text(), required=True)
     likes = columns.List(columns.Text(), required=True, default=[])
     dislikes = columns.List(columns.Text(), required=True, default=[])
 

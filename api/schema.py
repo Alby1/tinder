@@ -9,18 +9,13 @@ class Utente(BaseModel):
     cognome: str = ""
     mail: str = ""
     password: str = None
-    nascita: int | str = "" # anno-mese-giorno
+    nascita: str = "" # anno-mese-giorno
     interessi: list[str] = []
     genere: bool # vero = uomo; falso = donna
     token: Optional[str] = "empty"
     admin: bool = False
-    previously_matched: Optional[list[str]] = []
     likes: Optional[list[str]] = []
     dislikes: Optional[list[str]] = []
-
-    def nascita_(self):
-        if type(self.nascita_) is str:
-            self.nascita = (datetime.fromisoformat(self.nascita) - datetime.datetime(1970,1,1)).days
 
 
 class Utente_edit(BaseModel):
@@ -29,13 +24,24 @@ class Utente_edit(BaseModel):
     cognome: Optional[str] = ""
     mail: Optional[str] = ""
     password: Optional[str] = ""
-    nascita: Optional[int] | Optional[str] = ""
+    nascita: Optional[str] = ""
     interessi: Optional[list[str]] = []
     genere: Optional[bool] = None # vero = uomo; falso = donna
     token: str = "empty"
     admin: Optional[bool] = None
     likes: Optional[list[str]] = []
     dislikes: Optional[list[str]] = []
+
+class Utente_publicly_shareable(BaseModel):
+    id: UUID
+    nome: str = ""
+    cognome: str = ""
+    mail: str = ""
+    password: str = None
+    nascita: str = "" # anno-mese-giorno
+    interessi: list[str] = []
+    genere: bool # vero = uomo; falso = donna
+    interessi_comuni: list[str] = []
 
 class Interesse(BaseModel):
     id: Optional[UUID]

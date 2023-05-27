@@ -7,7 +7,7 @@ import secrets
 
 from .db import get_session
 from .models import Interesse, Utente 
-from .schema import Utente as Utente_, Interesse as Interesse_, Utente_edit, Interesse_edit
+from .schema import Utente as Utente_, Interesse as Interesse_, Utente_edit, Interesse_edit, Utente_publicly_shareable
 from .crud import create_entry
 
 app = FastAPI()
@@ -78,6 +78,15 @@ def checkauth(response: Response, mail: str, token: str):
     response.status_code = status.HTTP_401_UNAUTHORIZED
     return {"outcome" : "invalid"}
 
+@app.delete("/users", response_model=dict)
+def delete_users(token: str, response: Response):
+    utente: Utente = session.execute('SELECT * FROM utente WHERE "token" = %s ALLOW FILTERING', [token]).one()
+    if utente:
+        if utente['admin']:
+            session.execute("truncate utente")
+    response.status_code = status.HTTP_401_UNAUTHORIZED
+    return None
+
 
 @app.get("/interests", response_model=List[Interesse_])
 def get_interessi():
@@ -107,18 +116,26 @@ def edit_interesse(data: Interesse_edit, token:str, response: Response):
     return {"outcome": "invalid"}
 
 
-@app.get("/users/match")
+@app.get("/users/match", response_model=Utente_publicly_shareable)
 async def match_users(token: str, response: Response):
     utente: Utente = session.execute('SELECT * FROM utente WHERE "token" = %s ALLOW FILTERING', [token]).one()
     altri = session.execute(f'select * from utente').all()
-    print(utente)
+    disponibili = []
     for a in altri:
         if a['id'] != utente['id']:
-            for i in a['interessi']:
-                interessi_comuni = set(a['interessi']).intersection(set(utente['interessi']))
-                if len(interessi_comuni) > 0:
-                    if not (a['id'] in utente['likes'] or a['id'] in utente['dislikes']):
-                        print(a['nome'])
+            interessi_comuni = set(a['interessi']).intersection(set(utente['interessi']))
+            if len(interessi_comuni) > 0:
+                if not (a['id'] in utente['likes'] or a['id'] in utente['dislikes']):
+                    a['interessi_comuni'] = interessi_comuni
+                    disponibili.append(a)
 
-                
+    disponibili = set(disponibili)
+    return disponibili
+
+@app.get("/users/like")
+async def like_user(token: str, altro: str, likes: bool, response: Response):
+    utente: list = session.execute(f'SELECT {("likes" if likes else "dislikes")} FROM utente WHERE "token" = {token} ALLOW FILTERING').one()
+
+    utente.append(altro)
+    session.execute(f'update utente set {("likes" if likes else "dislikes")} = {utente} where "token" = {token}')
 
