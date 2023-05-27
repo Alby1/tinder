@@ -27,7 +27,8 @@ def root():
 @app.post("/users/add", response_model=Utente_)
 def user_add(data: Utente_):
     data.password = bcrypt.hashpw(data.password.encode('utf8'), bcrypt.gensalt()).decode('utf8')
-    data.nascita()
+    data.nascita_()
+    data.admin = False
     return create_entry(dict(data), Utente)
 
 @app.post("/users/edit")
@@ -109,6 +110,15 @@ def edit_interesse(data: Interesse_edit, token:str, response: Response):
 @app.get("/users/match")
 async def match_users(token: str, response: Response):
     utente: Utente = session.execute('SELECT * FROM utente WHERE "token" = %s ALLOW FILTERING', [token]).one()
-    # prendo altro utente?
+    altri = session.execute(f'select * from utente').all()
     print(utente)
+    for a in altri:
+        if a['id'] != utente['id']:
+            for i in a['interessi']:
+                interessi_comuni = set(a['interessi']).intersection(set(utente['interessi']))
+                if len(interessi_comuni) > 0:
+                    if not (a['id'] in utente['likes'] or a['id'] in utente['dislikes']):
+                        print(a['nome'])
+
+                
 
