@@ -21,11 +21,14 @@ Si vuole realizzare una applicazione di matchmaking di profili. L'esatto tema de
 6. Una mini-relazione in cui spiegate (a) il contributo personale di ognuno (b) un vostro commento sul database utilizzato , in particolare quanto lo avete trovato adatto al vostro progetto. 
     
     
-## requisiti
+## Requisiti
 - consegna su gitlab scuola
 - uso del DBMS CassandraDB
 
-## la divisione dei compiti
+
+# Mini-relazione
+
+## La divisione dei compiti
 Macchi Alberto:
 - backend
 - documentazione backend 
@@ -34,4 +37,14 @@ Macchi Alberto:
 
 Schiavone Antonio:
 - frontend
-- documentazione frontend 
+- documentazione frontend
+
+## Opinione sul DBMS (CassandraDB)
+Per il progetto abbiamo usato una versione cloud di CassandraDB fornita da [DataStax](https://datastax.com) chiamata [Astra](https://astra.datastax.com).
+All'inizio è stato complesso capire bene il funzionamento, ci sono stati alti e bassi.
+Alcuni problemi riscontrati sono stati:
+- Lunghi tempi di connessione;
+- Query Language incompleta: manca di funzionalità tipo l'operatore NOT o diverso da per le stringhe nelle condizioni del WHERE.
+Ci sono stati anche lati positivi:
+- In parte proprietà intrinseca del NoSQL: possibilità di modificare la struttura del DB semplicemente aggiungendo una variabile ad una classe all'interno del file python.
+Dopo questa esperienza non farei di questo DBMS la mia prima scelta per i requisiti di questo progetto.
