@@ -6,8 +6,8 @@ import bcrypt
 import secrets
 
 from .db import get_session
-from .models import Interesse, Utente 
-from .schema import Utente as Utente_, Interesse as Interesse_, Utente_edit, Interesse_edit, Utente_publicly_shareable
+from .models import Interesse, Utente, PropostaAppuntamento, Appuntamento
+from .schema import Utente as Utente_, Interesse as Interesse_, Utente_edit, Interesse_edit, Utente_publicly_shareable, PropostaAppuntamento as PropostaAppuntamento_, Appuntameto as Appuntameto_
 from .crud import create_entry
 
 app = FastAPI()
@@ -18,6 +18,8 @@ def startup():
     session = get_session()
     sync_table(Utente)
     sync_table(Interesse)
+    sync_table(PropostaAppuntamento)
+    sync_table(Appuntamento)
 
 
 @app.get("/")
@@ -153,5 +155,43 @@ def user_grant_admin(token: str, altro: str, admin: bool, response: Response):
                     session.execute(f'UPDATE interesse SET "admin" = {admin} WHERE "id" = \'{altro}\'')
                     return {"outcome": "valid"}
             
+    response.status_code = status.HTTP_401_UNAUTHORIZED
+    return {"outcome": "invalid"}
+
+@app.post("/date/create")
+def date_create(token: str, data: PropostaAppuntamento_, response: Response):
+    utente: Utente = session.execute('SELECT * FROM utente WHERE "token" = %s ALLOW FILTERING', [token]).one()
+    
+    if utente:
+        return create_entry(dict(data), PropostaAppuntamento)
+
+    response.status_code = status.HTTP_401_UNAUTHORIZED
+    return {"outcome": "invalid"}
+
+@app.get("/date")
+def get_date(token: str, response: Response):
+    utente: Utente = session.execute('SELECT * FROM utente WHERE "token" = %s ALLOW FILTERING', [token]).one()
+    
+    if utente:
+        return session.execute('select * from propostaappuntamento WHERE "utente_chiedente" = %s OR "utente_chieditore" = %s', utente['id'], utente['id'])
+
+    response.status_code = status.HTTP_401_UNAUTHORIZED
+    return {"outcome": "invalid"}
+
+@app.delete("/date")
+def delete_date(token: str, date: str, response: Response):
+    utente: Utente = session.execute('SELECT * FROM utente WHERE "token" = %s ALLOW FILTERING', [token]).one()
+    if utente:
+        return session.execute('delete propostaappuntamento where "id" = "%s" and "utente_chiedente" = %s OR "utente_chieditore" = %s', date, utente['id'], utente['id'])
+
+    response.status_code = status.HTTP_401_UNAUTHORIZED
+    return {"outcome": "invalid"}
+
+@app.post("/date/accept")
+def accept_date(token: str, appuntamento: Appuntameto_, response: Response):
+    utente: Utente = session.execute('SELECT * FROM utente WHERE "token" = %s ALLOW FILTERING', [token]).one()
+    if utente:
+        return create_entry(dict(appuntamento), Appuntamento)
+
     response.status_code = status.HTTP_401_UNAUTHORIZED
     return {"outcome": "invalid"}

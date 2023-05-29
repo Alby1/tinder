@@ -50,3 +50,14 @@ class Interesse(BaseModel):
 class Interesse_edit(BaseModel):
     id: UUID
     nome: str
+
+class PropostaAppuntamento(BaseModel):
+    id: Optional[UUID]
+    data: str
+    utente_chiedente: str
+    utente_chieditore: str
+
+class Appuntameto(BaseModel):
+    id: Optional[UUID]
+    data: str
+    proposta: str

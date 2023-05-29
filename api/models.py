@@ -21,3 +21,17 @@ class Interesse(Model):
     __keyspace__ = 'tinder'
     id = columns.Text(primary_key=True, required=True)
     nome = columns.Text(required=True)
+    immagine = columns.Text(required=True)
+
+class PropostaAppuntamento(Model):
+    __keyspace__ = 'tinder'
+    id = columns.Text(primary_key=True, required=True)
+    data = columns.Text(required=True)
+    utente_chiedente = columns.Text(required=True)
+    utente_chieditore = columns.Text(required=True)
+
+class Appuntamento(Model):
+    __keyspace__ = 'tinder'
+    id = columns.Text(primary_key=True, required=True)
+    data = columns.Text(required=True)
+    proposta = columns.Text(required=True)
