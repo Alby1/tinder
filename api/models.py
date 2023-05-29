@@ -11,6 +11,7 @@ class Utente(Model):
     nascita = columns.Text(required=True)
     genere = columns.Boolean(required=True)
     interessi = columns.List(columns.Text(), required=True, custom_index=True)
+    pictures = columns.List(columns.Text(), required=True)
     token = columns.Text(required=True, custom_index=True)
     admin = columns.Boolean(required=True, custom_index=True, default=False)
     likes = columns.List(columns.Text(), required=True, default=[])

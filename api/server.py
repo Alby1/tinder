@@ -29,7 +29,6 @@ def root():
 @app.post("/users/add", response_model=Utente_)
 def user_add(data: Utente_):
     data.password = bcrypt.hashpw(data.password.encode('utf8'), bcrypt.gensalt()).decode('utf8')
-    data.nascita_()
     data.admin = False
     return create_entry(dict(data), Utente)
 

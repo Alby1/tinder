@@ -11,6 +11,7 @@ class Utente(BaseModel):
     password: str = None
     nascita: str = "" # anno-mese-giorno
     interessi: list[str] = []
+    pictures: list[str] = []
     genere: bool # vero = uomo; falso = donna
     token: Optional[str] = "empty"
     admin: bool = False
@@ -46,10 +47,12 @@ class Utente_publicly_shareable(BaseModel):
 class Interesse(BaseModel):
     id: Optional[UUID]
     nome: str
+    immagine: Optional[str]
 
 class Interesse_edit(BaseModel):
     id: UUID
-    nome: str
+    nome: Optional[str]
+    immagine: Optional[str]
 
 class PropostaAppuntamento(BaseModel):
     id: Optional[UUID]
