@@ -48,3 +48,21 @@ Alcuni problemi riscontrati sono stati:
 Ci sono stati anche lati positivi:
 - In parte proprietà intrinseca del NoSQL: possibilità di modificare la struttura del DB semplicemente aggiungendo una variabile ad una classe all'interno del file python.
 Dopo questa esperienza non farei di questo DBMS la mia prima scelta per i requisiti di questo progetto.
+
+
+# Documentazione
+## Come eseguire i moduli software
+## Backend:
+- verificare che il proprio computer abbia installato Python (con la sua cartella scripts nel path su Windows)
+Ogni volta che viene descritto un comando da eseguire, se `python` non viene trovato come comando provare le alternative `py` o `python3`
+- `cd api`
+- `pip install -r requirements.txt`
+- `cd ..`
+- `python -m api`
+Sarà ora possibile accedere alle rotte da localhost:5000 (porta modificale in `api/__main__.py`)
+
+## Frontend:
+- Verificare che il proprio computer abbia installato NodeJS
+- `cd web`
+- `npm run dev`
+Sarà ora possibile accedere all'interfaccia web da localhost:5600 (porta modificabile dentro a `"dev"` dentro a `"scripts"` in `web/package.json`)
