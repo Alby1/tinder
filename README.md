@@ -1,5 +1,18 @@
 # Tinder 2
- un tinder per piffy
+Un tinder per [Piffy](https://github.com/piffy)
+
+[IT]
+
+## Aggiornamento 2025-04-15 (YYYY-MM-DD)
+Questo era un compito per scuola. Rendo questa repository pubblica dopo anni. Purtroppo non è mai stato veramente completato ma è stato un primo approccio interessante verso cose nuove.
+Qua sotto è ancora la descrizione originale.
+
+"Vi rubo user id e token che avete lasciato nel codice"
+- l'account probabilmente non esiste più
+- l'istanza del DB deve essere manualmente riaccesa dopo tot. tempo di inattività (e non è stata attiva per MOOOLTO tempo)
+- il CA nello zip è scaduto
+
+
 
 ## Assegnazione 
 Si vuole realizzare una applicazione di matchmaking di profili. L'esatto tema dell'applicazione è lasciato alla vostra fantasia: potrebbe essere appuntamenti (stile Tinder), oppure accoppiamenti di cani di razza, avversari per partite di tennis, paddle o calcio. Indipendentemente dal tema scelto, il progetto dovrà prevedere i seguenti casi d'uso: 
@@ -35,7 +48,7 @@ Macchi Alberto:
 - gestione db
 - project manager
 
-Schiavone Antonio:
+[Schiavone Antonio](https://github.com/SchiavoAnto/):
 - frontend
 - documentazione frontend
 
